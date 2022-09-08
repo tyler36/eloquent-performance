@@ -16,6 +16,7 @@ class UsersController extends Controller
     public function index()
     {
         $users = User::query()
+            ->search(request('search'))
             ->with('company')
             ->paginate(10);
 
