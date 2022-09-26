@@ -54,7 +54,9 @@ class User extends Authenticatable
         collect(str_getcsv($terms, ' ', '"'))
             ->filter()
             ->each(function ($term) use ($query) {
-                $term = $term . '%';
+                // $term = $term . '%';
+                $term = preg_replace('/[^A-Za-z0-9]/', '', $term) . '%';
+
                 // 6 queries, 6.69ms, 5.58ms,
                 // $query->where(function ($query) use ($term) {
                 //     $query
@@ -68,14 +70,14 @@ class User extends Authenticatable
                     ->from(function ($query) use ($term) {
                         $query->select('id')
                             ->from('users')
-                            ->where('first_name', 'like', $term)
-                            ->orWhere('last_name', 'like', $term)
+                            ->where('first_name_normalized', 'like', $term)
+                            ->orWhere('last_name_normalized', 'like', $term)
                             ->union(
                                 $query->newQuery()
                                 ->select('users.id')
                                 ->from('users')
                                 ->join('companies', 'companies.id', '=', 'users.company_id')
-                                ->where('companies.name', 'like', $term)
+                                ->where('companies.name_normalized', 'like', $term)
                             );
                     }, 'matches');
                 });
