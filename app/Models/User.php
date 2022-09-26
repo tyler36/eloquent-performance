@@ -59,11 +59,7 @@ class User extends Authenticatable
                     $query
                         ->where('first_name', 'like', $term)
                         ->orWhere('last_name', 'like', $term)
-                        ->orWhereIn('company_id', function ($query) use ($term) {
-                            $query->select('id')
-                                ->from('companies')
-                                ->where('name', 'like', $term);
-                        });
+                        ->orWhereIn('company_id', Company::query()->where('name', 'like', $term)->pluck('id'));
                 });
             });
     }
