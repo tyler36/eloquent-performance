@@ -14,4 +14,20 @@ class Customer extends Model
     {
         return $this->belongsTo(User::class, 'sales_rep_id');
     }
+
+
+    /**
+     * Summary of scopeVisibleTo
+     * @param Builder $query
+     * @param User $user
+     * @return Builder
+     */
+    public function scopeVisibleTo($query, User $user)
+    {
+        if ($user->is_owner) {
+            return;
+        }
+
+        $query->where('sales_rep_id', $user->id);
+    }
 }
