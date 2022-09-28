@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,4 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [UsersController::class, 'index'])->name('user.index');
+Route::get('/users', [UsersController::class, 'index'])->name('user.index');
+Route::get('/customers', [CustomersController::class, 'index'])->name('customer.index');
